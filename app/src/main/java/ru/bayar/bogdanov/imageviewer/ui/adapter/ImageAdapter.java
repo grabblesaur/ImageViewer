@@ -1,23 +1,36 @@
 package ru.bayar.bogdanov.imageviewer.ui.adapter;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.bayar.bogdanov.imageviewer.R;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
-    private List<String> mLinkList;
+    private static final String TAG = ImageAdapter.class.getName();
 
-    public ImageAdapter() {
+    private List<String> mLinkList;
+    private Context mContext;
+
+    public ImageAdapter(Context context) {
         mLinkList = new ArrayList<>();
+        mContext = context;
     }
 
     @Override
@@ -43,13 +56,34 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_iv)
+        ImageView mImageView;
+
         public ImageViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         public void onBind(String link) {
-            // TODO: 31.08.2017 USE GLIDE MTHFOSKCKER
+            Log.i(TAG, "onBind: " + link);
+            Glide.with(mContext)
+                    .load(link)
+                    .centerCrop()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            Log.e(TAG, "onException: " + e.getMessage());
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            Log.i(TAG, "onResourceReady: ");
+                            return false;
+                        }
+                    })
+                    .into(mImageView);
         }
     }
 }

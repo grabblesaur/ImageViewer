@@ -1,9 +1,8 @@
 package ru.bayar.bogdanov.imageviewer.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -44,8 +43,8 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void initViews() {
         Log.i(TAG, "initViews: ");
         // TODO: 31.08.2017 need to determine whether it was smartphone or tablet
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
-        mImageAdapter = new ImageAdapter();
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mImageAdapter = new ImageAdapter(this);
         mRecyclerView.setAdapter(mImageAdapter);
         mPresenter.getLinks();
     }
