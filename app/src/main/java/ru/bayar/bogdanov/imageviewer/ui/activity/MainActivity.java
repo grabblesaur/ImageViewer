@@ -16,6 +16,7 @@ import ru.bayar.bogdanov.imageviewer.R;
 import ru.bayar.bogdanov.imageviewer.base.BaseActivity;
 import ru.bayar.bogdanov.imageviewer.presenter.MainPresenter;
 import ru.bayar.bogdanov.imageviewer.ui.adapter.ImageAdapter;
+import ru.bayar.bogdanov.imageviewer.ui.adapter.SpacesItemDecoration;
 import ru.bayar.bogdanov.imageviewer.ui.view.MainView;
 
 public class MainActivity extends BaseActivity implements MainView {
@@ -41,11 +42,16 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void initViews() {
-        Log.i(TAG, "initViews: ");
-        // TODO: 31.08.2017 need to determine whether it was smartphone or tablet
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        Log.i(TAG, "initViews: isTablet = " + isTablet);
+        if (isTablet) {
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        } else {
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        }
         mImageAdapter = new ImageAdapter(this);
         mRecyclerView.setAdapter(mImageAdapter);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(4));
         mPresenter.getLinks();
     }
 
